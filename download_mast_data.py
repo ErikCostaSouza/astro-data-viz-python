@@ -85,18 +85,18 @@ def download_hubble_data(target: str = "M51",
                 
                 # Baixa os dados
                 products = Observations.get_product_list(obs)
-                
+
                 if len(products) == 0:
                     logger.warning("   ⚠️ Nenhum arquivo disponível")
                     continue
-                
-                # Filtra apenas FITS
-                fits_products = products[products['productFilename'].str.endswith('.fits')]
-                
+
+                # Filtra apenas FITS (compatível com astropy Table)
+                fits_products = [p for p in products if str(p['productFilename']).lower().endswith('.fits')]
+
                 if len(fits_products) == 0:
                     logger.warning("   ⚠️ Nenhum arquivo FITS encontrado")
                     continue
-                
+
                 # Baixa apenas o primeiro FITS de cada observação
                 product = fits_products[0]
                 
@@ -203,18 +203,18 @@ def download_jwst_data(target: str = "CEERS",
                 logger.info(f"   Instrumento: {obs['instrument_name']}")
                 
                 products = Observations.get_product_list(obs)
-                
+
                 if len(products) == 0:
                     logger.warning("   ⚠️ Nenhum arquivo disponível")
                     continue
-                
-                # Filtra apenas FITS
-                fits_products = products[products['productFilename'].str.endswith('.fits')]
-                
+
+                # Filtra apenas FITS (compatível com astropy Table)
+                fits_products = [p for p in products if str(p['productFilename']).lower().endswith('.fits')]
+
                 if len(fits_products) == 0:
                     logger.warning("   ⚠️ Nenhum arquivo FITS encontrado")
                     continue
-                
+
                 product = fits_products[0]
                 
                 output_file = os.path.join(
