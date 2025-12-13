@@ -90,8 +90,17 @@ def download_hubble_data(target: str = "M51",
                     logger.warning("   ⚠️ Nenhum arquivo disponível")
                     continue
 
+                # Determina a coluna que contém o nome do arquivo (compatível com variações da tabela)
+                filename_col = None
+                for col in products.colnames:
+                    if 'file' in col.lower() or 'filename' in col.lower() or 'product' in col.lower():
+                        filename_col = col
+                        break
+                if filename_col is None:
+                    filename_col = products.colnames[0]
+
                 # Filtra apenas FITS (compatível com astropy Table)
-                fits_products = [p for p in products if str(p['productFilename']).lower().endswith('.fits')]
+                fits_products = [p for p in products if str(p[filename_col]).lower().endswith('.fits')]
 
                 if len(fits_products) == 0:
                     logger.warning("   ⚠️ Nenhum arquivo FITS encontrado")
@@ -208,8 +217,17 @@ def download_jwst_data(target: str = "CEERS",
                     logger.warning("   ⚠️ Nenhum arquivo disponível")
                     continue
 
+                # Determina a coluna que contém o nome do arquivo (compatível com variações da tabela)
+                filename_col = None
+                for col in products.colnames:
+                    if 'file' in col.lower() or 'filename' in col.lower() or 'product' in col.lower():
+                        filename_col = col
+                        break
+                if filename_col is None:
+                    filename_col = products.colnames[0]
+
                 # Filtra apenas FITS (compatível com astropy Table)
-                fits_products = [p for p in products if str(p['productFilename']).lower().endswith('.fits')]
+                fits_products = [p for p in products if str(p[filename_col]).lower().endswith('.fits')]
 
                 if len(fits_products) == 0:
                     logger.warning("   ⚠️ Nenhum arquivo FITS encontrado")
